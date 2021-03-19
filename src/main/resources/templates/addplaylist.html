@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Add PlayList</title>
+    <style>
+        .button_submit{
+            background-color: #4CAF50;
+            color: white;
+            padding: 14px 20px;
+            margin: 8px 0;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .input_text{
+            padding: 12px 20px;
+            margin: 8px 0;
+            display: inline-block;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+    </style>
+<script>
+    const channel = new BroadcastChannel("test-channel");
+    function postmsg() {
+
+    channel.postMessage("playlist added");
+
+    }
+
+    channel.onmessage=()=>{
+        //ajax call to reload thymeleaf fragment
+        const Http = new XMLHttpRequest();
+        const url='/reload';
+        Http.open("GET", url);
+        Http.send();
+        Http.onreadystatechange=()=>{
+
+
+            document.getElementById("reload").innerHTML=Http.responseText;
+        }
+
+
+    }
+</script>
+</head>
+<body>
+<div>
+    <form action="#" th:action="@{/playlistadd}" method="post" th:object="${playlist}">
+        <label for="pname">PlayList Name</label>
+        <input class="input_text" type="text" id="pname" name="playlistname" placeholder="PlayList  name.." th:field="*{name}" required>
+        <br>
+        <button class="button_submit" type="submit" onclick="postmsg()">Add playList</button>
+
+    </form>
+</div>
+</body>
+</html>

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Play List of songs</title>
+
+    <style>
+        table, th, td {
+            border: 1px solid black;
+            border-collapse: collapse;
+        }
+    </style>
+
+    <script>
+        const channel = new BroadcastChannel("test-channel");
+        function postmsg() {
+
+            channel.postMessage("reload page");
+
+        }
+        channel.onmessage=()=>{
+            console.log("inside onmessage");
+            //ajax call to reload thymeleaf fragment
+            const Http = new XMLHttpRequest();
+            const url='/reload';
+            Http.open("GET", url);
+            Http.send();
+            Http.onreadystatechange=()=>{
+
+
+              document.getElementById("reload").innerHTML=Http.responseText;
+            }
+
+
+        }
+
+    </script>
+</head>
+<body>
+<div th:fragment="tablelist" id="reload">
+<table style="width:100%">
+    <tr>
+        <th>Name</th>
+        <th>Songs</th>
+        <th></th>
+    </tr>
+
+    <th:block th:each="playlist:${playlists}">
+        <tr >
+            <td th:text="${playlist.name}"></td>
+
+        <td>
+
+            <th:block th:each="song:${playlist.songs}">
+
+
+                    <p th:text="${song.name}+'  '+${song.singer}"></p>
+                <form action="#" th:action="@{/deletesong/{id}(id=${song.id})}" onclick="postmsg();"><button type="submit" style="background-color: crimson;color: aliceblue" >Delete</button></form>
+
+            </th:block>
+        </td>
+
+
+
+            <td>
+                <form action="#" th:action="@{/addsongform/{id}(id=${playlist.id})}" ><button type="submit" style="background-color: #4CAF50">Add Song</button></form>
+
+                <form action="#" th:action="@{/deleteplaylist/{id}(id=${playlist.id})}" onclick="postmsg();"><button type="submit">Delete PlayList</button></form>
+            </td>
+        </tr>
+
+
+
+
+</th:block>
+
+        <form >
+            <button type="submit" formaction="/addplaylist">Add playlist</button>
+        </form>
+
+
+
+</table>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Song to playlist</title>
+    <script>
+        const channel = new BroadcastChannel("test-channel");
+        function postmsg() {
+            console.log("add song postmsg called")
+
+            channel.postMessage("songs added");
+
+        }
+
+        channel.onmessage=()=>{
+            //ajax call to reload thymeleaf fragment
+            const Http = new XMLHttpRequest();
+            const url='/reload';
+            Http.open("GET", url);
+            Http.send();
+            Http.onreadystatechange=()=>{
+
+
+               document.getElementById("reload").innerHTML=Http.responseText;
+            }
+
+
+        }
+    </script>
+</head>
+<body>
+<h2 align="center">Add song to playlist</h2>
+
+<form action="#" th:action="@{/addsong}" method="post" th:object="${songdto}" >
+
+
+    <label for="sname">Song Name</label>
+    <input type="text" id="sname" name="songname" placeholder="Song name.." th:field="*{name}">
+
+    <label for="singername">Last Name</label>
+    <input type="text" id="singername" name="singername" placeholder="Singer name.." th:field="*{singer}">
+    <input type="hidden" th:field="*{playlistid}">
+
+    <input onclick="postmsg()" type="submit" value="Submit">
+
+
+</form>
+
+
+</body>
+</html>
