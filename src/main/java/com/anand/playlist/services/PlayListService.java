@@ -17,7 +17,7 @@ public interface PlayListService {
 
     public Playlist updateplaylist(Playlist playlist);
 
-    public void deletesong(Long id);
+    public void deleteSong(Long id);
 
 
 }

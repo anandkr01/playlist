@@ -51,14 +51,10 @@ public class PlayservicesImpl implements PlayListService{
     }
 
     @Override
-    public void deletesong(Long id) {
-
-
+    public void deleteSong(Long id) {
 
         Song song=songRepo.getOne(id);
-      // Playlist playlist= song.getPlaylist();
-       //List<Song> snglst=playlist.getSongs();
-       //snglst.remove(song);
+
         songRepo.delete(song);
 
 

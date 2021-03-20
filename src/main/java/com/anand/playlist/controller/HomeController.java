@@ -82,7 +82,7 @@ public class HomeController {
    @GetMapping("/deletesong/{id}")
    public String deletesong(@PathVariable(name = "id") Long id){
 
-        playListService.deletesong(id);
+        playListService.deleteSong(id);
 
         return "redirect:/";
    }
